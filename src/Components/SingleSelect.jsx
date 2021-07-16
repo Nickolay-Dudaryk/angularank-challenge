@@ -8,7 +8,7 @@ const SingleSelect = ({ selectedOption, handleChange }) => {
         <option value="contributions">Contributions</option>
         <option value="followers">Followers</option>
         <option value="repositories">Repositories</option>
-        <option valie="gists">Gists</option>
+        <option value="gists">Gists</option>
       </select>
     </label>
   );
