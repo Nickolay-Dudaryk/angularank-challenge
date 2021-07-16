@@ -1,0 +1,14 @@
+.contributor-item {
+  padding: 20px;
+  margin-bottom: 30px;
+  width: 90vw;
+  border: 1px solid gray;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contributor-item:last-child {
+  margin-bottom: 0;
+}
