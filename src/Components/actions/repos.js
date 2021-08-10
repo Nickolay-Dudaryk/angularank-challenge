@@ -3,102 +3,131 @@ import {
   setIsFetching,
   setRepos,
   setContributors,
+  setContributorData,
 } from "../../reducers/reposReduser";
 
-export const getReposAmount = async () => {
-  const { data } =  await(axios.get('https://api.github.com/orgs/angular'));
-        
-  return (await(data.public_repos));
-}
+const perPage = 100;
 
+export const getReposAmount = async () => {
+  try {
+    const { data } = await axios.get("https://api.github.com/orgs/angular");
+
+    return await data.public_repos;
+  } catch (err) {
+    console.log(`getReposAmount error: ${err}`);
+  }
+};
 
 export const fetchRepos = (reposAmount) => {
   return async (dispatch) => {
     try {
       dispatch(setIsFetching(true));
 
-      // const headers = {
-      //   Authorization: "token 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",
-      // };
+      // const repos = [];
+      // let i = 0;
+      // let end = false;
 
-      const perPage = 100;
-      // const countOfQueries = Math.ceil(reposAmount / perPage);
-      const repos = [];
-      let i = 0;
-      let end = false;
-      do {
-        i++;
-        const {data} = await(axios.get(`https://api.github.com/orgs/angular/repos?per_page=${perPage}&page=${i}`));
-        repos.push(...data);
-        end = !!data.length;
-      } while (end);
-
-      // for (let i = 0; i < countOfQueries; i++) {
-      //   const {data} = await(axios.get(`https://api.github.com/orgs/angular/repos?per_page=${perPage}&page=${i+1}`));
-
+      // do {
+      //   i++;
+      //   const { data } = await axios.get(
+      //     `https://api.github.com/orgs/angular/repos?per_page=${perPage}&page=${i}`
+      //   );
       //   repos.push(...data);
-      // }
+      //   end = !!data.length;
+      // } while (end);
+      const { data } = await axios.get(
+        `https://api.github.com/orgs/angular/repos?per_page=5&page=1`,
+        {
+          headers: {
+            Authorization: "token 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",
+          },
+        }
+      );
 
-      dispatch(setRepos(repos));
-
+      dispatch(setRepos(data));
     } catch (err) {
-      console.log(err);
+      console.log(`fetchRepos error: ${err}`);
     }
   };
 };
 
 export const fetchContributors = (repositories) => {
-  return async(dispatch) => {
+  return async (dispatch) => {
     try {
+      dispatch(setIsFetching(true));
+
+      // repositories.map(async (repository) => {
+      //   const contrib = [];
+      //   let i = 0;
+      //   let end = false;
+
+      //   do {
+      //     i++;
+      //     const { data } = await axios.get(
+      //       `${repository.contributors_url}?per_page=${perPage}&page=${i}`
+      //     );
+      //     contrib.push(...data);
+      //     end = !!data.length;
+      //   } while (end);
+
+      // const contrib = [];
+
       repositories.map(async (repository) => {
-        // const uniqueContributors = [...new Set(contributors.map((el) => el.id))];
-    
-        const perPage = 100;
-        // const countOfQueries = Math.ceil(reposAmount / perPage);
-        const contrib = [];
-        let i = 0;
-        let end = false;
-        do {
-          i++;
-          const {data} = await(axios.get(`${repository.contributors_url}?per_page=${perPage}`));
-          contrib.push(...data);
-          end = !!data.length;
-        } while (end);
-    
-        // const { data } = axios.get(`${repository.contributors_url}?per_page=100`);
-    
-        const uniqueContributors = [...new Set(contrib.map((el) => el.id))];
-    
-        dispatch(setContributors(uniqueContributors))
-      })
-    } catch(err) {
-      console.log(err)
-    }
-  }
-}
+        const { data } = await axios.get(
+          `${repository.contributors_url}?per_page=5&page=1`,
+          {
+            headers: {
+              Authorization: "token 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",
+            },
+          }
+        );
 
-export const fetchContributorData = (contributor) => {
-  // await Promise.all(
-          //   contributorData.map(async (contributor) => {
-          //     const urlFollowers = `${contributor.followers_url}?per_page=100`;
-          //     const urlGists = `https://api.github.com/users/${contributor.login}/gists?per_page=100`;
-          //     const urlRepos = `${contributor.repos_url}?per_page=100`;
+        data.forEach(async (el) => {
+          const { data } = await axios.get(
+            `https://api.github.com/users/${el.login}`
+          );
 
-          //     const results = await Promise.all([
-          //       fetch(urlFollowers),
-          //       fetch(urlGists),
-          //       fetch(urlRepos),
-          //     ]);
-
-          //     const dataPromises = await results.map((el) => el.json());
-          //     const contributorDetails = await Promise.all(dataPromises);
-
-          //     contributor.followers_amount = contributorDetails[0].length;
-          //     contributor.gists_amount = contributorDetails[1].length;
-          //     contributor.repos_amount = contributorDetails[2].length;
-
-          //     dispatch(setContributors(contributorData));
-          //   })
+          // console.log(
+          //   el,
+          //   contributorData.public_repos,
+          //   contributorData.public_gists,
+          //   contributorData.followers
           // );
-  return null;
-}
+          console.log({ ...el, ...data });
+
+          dispatch(
+            setContributors({
+              ...el,
+              ...data,
+            })
+          );
+        });
+      });
+    } catch (err) {
+      console.log(`fetchContributors error: ${err}`);
+    }
+  };
+};
+
+// export const fetchContributorData = (contributors) => {
+//   return async (dispatch) => {
+//     try {
+//       dispatch(setIsFetching(true));
+
+//       contributors.map(async (contributor) => {
+//         const { data } = await axios.get(
+//           `https://api.github.com/users/${contributor.login}`,
+//           {
+//             headers: {
+//               Authorization: "token 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",
+//             },
+//           }
+//         );
+
+//         dispatch(setContributorData(data));
+//       });
+//     } catch (err) {
+//       console.log(`fetchContributorData error: ${err}`);
+//     }
+//   };
+// };

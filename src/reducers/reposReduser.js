@@ -14,14 +14,27 @@ export default function reposReducer(state = defaultState, action) {
       return {
         ...state,
         repositories: action.payload,
-        isFetching: false,
       };
     case SET_CONTRIBUTORS:
+      const newContributors = [...state.contributors];
+      const { payload } = action;
+
+      const contributor = newContributors.find(
+        (contr) => contr.id === payload.id
+      );
+
+      if (!contributor) {
+        newContributors.push(payload);
+      } else {
+        contributor.contributions += payload.contributions;
+      }
+
       return {
         ...state,
-        contributors: action.payload,
+        contributors: newContributors,
         isFetching: false,
       };
+
     case SET_IS_FETCHING:
       return {
         ...state,

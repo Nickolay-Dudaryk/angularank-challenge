@@ -6,9 +6,10 @@ const SingleSelect = ({ selectedOption, handleChange }) => {
       Sort by
       <select value={selectedOption.value} onChange={handleChange}>
         <option value="contributions">Contributions</option>
-        <option value="followers">Followers</option>
         <option value="repositories">Repositories</option>
         <option value="gists">Gists</option>
+        <option value="followers">Followers</option>
+        <option value="login">Name</option>
       </select>
     </label>
   );

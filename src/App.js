@@ -1,7 +1,10 @@
-import React from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchContributors, fetchRepos, getReposAmount } from "./Components/actions/repos";
+import {
+  fetchContributors,
+  fetchRepos,
+  getReposAmount,
+} from "./Components/actions/repos";
 import { nanoid } from "nanoid";
 import ContributorItem from "./Components/ContributorItem";
 import SingleSelect from "./Components/SingleSelect";
@@ -13,51 +16,50 @@ const App = () => {
   const contributors = useSelector((state) => state.repos.contributors);
   const isFetching = useSelector((state) => state.repos.isFetching);
 
-  const [selectedOption, setSelectedOption] = React.useState({
-    value: "contributions",
-  });
-  const [reposAmount, setReposAmount] = React.useState(0);
-  
+  const [selectedOption, setSelectedOption] = useState("contributions");
+  const [reposAmount, setReposAmount] = useState(0);
+
   const handleChange = (e) => {
-    setSelectedOption({ value: e.target.value });
+    setSelectedOption(e.target.value);
+
     renderContributors();
   };
-  
-  React.useEffect(() => {
-    const fn = async() => {
-      setReposAmount(await getReposAmount());
-    };
-    fn();
+
+  useEffect(() => {
+    (async () => setReposAmount(await getReposAmount()))();
   }, []);
 
-  React.useEffect(() => {
-    const fn = async() => {
-      dispatch(fetchRepos(reposAmount));
-    };
-    fn();
+  useEffect(() => {
+    dispatch(fetchRepos(reposAmount));
   }, [reposAmount]);
 
-  // React.useEffect(() => {
-  //   const fn = async() => {
-  //     dispatch(fetchContributors(repositories));
-  //   };
-  //   fn();
-  // }, []);
+  useEffect(() => {
+    dispatch(fetchContributors(repositories));
+  }, [repositories]);
 
+  useEffect(() => {
+    renderContributors();
+  }, [contributors]);
 
   const renderContributors = () => {
     return (
       <ul className="contributors-list">
-        {contributors
-          .sort((a, b) => b[selectedOption.value] - a[selectedOption.value])
+        {[...contributors]
+          .sort((a, b) =>
+            selectedOption === "login"
+              ? a[selectedOption]
+                  .toLowerCase()
+                  .localeCompare(b[selectedOption].toLowerCase())
+              : b[selectedOption] - a[selectedOption]
+          )
           .map((el) => (
             <ContributorItem
               key={nanoid()}
               name={el.login}
               contributions={el.contributions}
-              followers={el.followers_amount}
-              repositories={el.repos_amount}
-              gists={el.gists_amount}
+              repositories={el.public_repos}
+              gists={el.public_gists}
+              followers={el.followers}
             />
           ))}
       </ul>
@@ -84,3 +86,5 @@ const App = () => {
 };
 
 export default App;
+
+// TODO : sorting
