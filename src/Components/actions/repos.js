@@ -10,29 +10,13 @@ dotenv.config();
 
 const GITHUB_TOKEN = process.env.REACT_APP_GITHUB_API_TOKEN;
 
-const perPage = 5;
+const perPage = 4;
 
 export const fetchRepos = () => {
   return async (dispatch) => {
     try {
       dispatch(setIsFetching(true));
-      // const repos = [];
-      // let i = 0;
-      // let end = false;
 
-      // do {
-      //   i++;
-      //   const { data } = await axios.get(
-      //     `https://api.github.com/orgs/angular/repos?per_page=${perPage}&page=${i}`,
-      //     {
-      //       headers: {
-      //         Authorization: `token ${GITHUB_TOKEN}`,
-      //       },
-      //     }
-      //   );
-      //   repos.push(...data);
-      //   end = !!data.length;
-      // } while (end);
       const { data } = await axios.get(
         `https://api.github.com/orgs/angular/repos?per_page=${perPage}&page=1`,
         {
@@ -43,7 +27,6 @@ export const fetchRepos = () => {
       );
 
       dispatch(setRepos(data));
-      // dispatch(setRepos(repos));
     } catch (err) {
       console.log(`fetchRepos error: ${err}`);
     }
@@ -54,22 +37,6 @@ export const fetchContributors = (repositories) => {
   return async (dispatch) => {
     try {
       dispatch(setIsFetching(true));
-
-      // repositories.map(async (repository) => {
-      //   const contrib = [];
-      //   let i = 0;
-      //   let end = false;
-
-      //   do {
-      //     i++;
-      //     const { data } = await axios.get(
-      //       `${repository.contributors_url}?per_page=${perPage}&page=${i}`
-      //     );
-      //     contrib.push(...data);
-      //     end = !!data.length;
-      //   } while (end);
-
-      // const contrib = [];
 
       repositories.map(async (repository) => {
         const { data } = await axios.get(
@@ -99,3 +66,25 @@ export const fetchContributors = (repositories) => {
     }
   };
 };
+
+// FETCH ALL ITEMS FROM API
+
+// const repos = [];
+// let i = 0;
+// let end = false;
+
+// do {
+//   i++;
+//   const { data } = await axios.get(
+//     `https://api.github.com/orgs/angular/repos?per_page=${perPage}&page=${i}`,
+//     {
+//       headers: {
+//         Authorization: `token ${GITHUB_TOKEN}`,
+//       },
+//     }
+//   );
+//   repos.push(...data);
+//   end = !!data.length;
+// } while (end);
+
+// dispatch(setRepos(repos));

@@ -1,18 +1,26 @@
-import React from 'react';
+import React from "react";
+
+const options = [
+  { value: "contributions", label: "Contributions" },
+  { value: "public_repos", label: "Repositories" },
+  { value: "public_gists", label: "Gists" },
+  { value: "followers", label: "Followers" },
+  { value: "login", label: "Name" },
+];
 
 const SingleSelect = ({ selectedOption, handleChange }) => {
+  const optionsArray = options.map(({ value, label }) => (
+    <option value={value}>{label}</option>
+  ));
+
   return (
     <label>
       Sort by
       <select value={selectedOption.value} onChange={handleChange}>
-        <option value="contributions">Contributions</option>
-        <option value="repositories">Repositories</option>
-        <option value="gists">Gists</option>
-        <option value="followers">Followers</option>
-        <option value="login">Name</option>
+        {optionsArray}
       </select>
     </label>
   );
-}
+};
 
 export default SingleSelect;

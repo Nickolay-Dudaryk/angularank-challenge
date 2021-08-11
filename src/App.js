@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchContributors, fetchRepos } from "./Components/actions/repos";
-import { nanoid } from "nanoid";
-import ContributorItem from "./Components/ContributorItem";
+import ContributorList from "./Components/ContributorList";
 import SingleSelect from "./Components/SingleSelect";
 
 const App = () => {
@@ -28,50 +27,26 @@ const App = () => {
     dispatch(fetchContributors(repositories));
   }, [repositories]);
 
-  useEffect(() => {
-    renderContributors();
-  }, [contributors]);
-
   const renderContributors = () => {
     return (
-      <ul className="contributors-list">
-        {[...contributors]
-          .sort((a, b) =>
-            selectedOption === "login"
-              ? a[selectedOption]
-                  .toLowerCase()
-                  .localeCompare(b[selectedOption].toLowerCase())
-              : b[selectedOption] - a[selectedOption]
-          )
-          .map((el) => (
-            <ContributorItem
-              key={nanoid()}
-              name={el.login}
-              contributions={el.contributions}
-              repositories={el.public_repos}
-              gists={el.public_gists}
-              followers={el.followers}
-            />
-          ))}
-      </ul>
+      <ContributorList
+        isFetching={isFetching}
+        selectedOption={selectedOption}
+        contributors={contributors}
+      />
     );
   };
 
   return (
     <div className="app">
-      {isFetching ? (
-        <p className="loading">Loading...</p>
-      ) : (
-        <>
-          <p>Contributors</p>
-          <SingleSelect
-            selectedOption={selectedOption}
-            handleChange={handleChange}
-          />
+      <p>Contributors</p>
 
-          {renderContributors()}
-        </>
-      )}
+      <SingleSelect
+        selectedOption={selectedOption}
+        handleChange={handleChange}
+      />
+
+      {isFetching ? <p>Loading...</p> : renderContributors()}
     </div>
   );
 };
