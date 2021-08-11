@@ -78,7 +78,7 @@ export const fetchContributors = (repositories) => {
           `${repository.contributors_url}?per_page=5&page=1`,
           {
             headers: {
-              Authorization: "token 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",
+              Authorization: `token ${process.env.GITHUB_API_TOKEN}`,
             },
           }
         );
