@@ -1,4 +1,5 @@
 import React from "react";
+import { nanoid } from "nanoid";
 
 const options = [
   { value: "contributions", label: "Contributions" },
@@ -10,7 +11,7 @@ const options = [
 
 const SingleSelect = ({ selectedOption, handleChange }) => {
   const optionsArray = options.map(({ value, label }) => (
-    <option value={value}>{label}</option>
+    <option value={value} key={nanoid()}>{label}</option>
   ));
 
   return (

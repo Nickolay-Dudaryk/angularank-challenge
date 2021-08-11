@@ -3,7 +3,6 @@ import { nanoid } from "nanoid";
 import ContributorItem from "./ContributorItem";
 
 const ContributorList = ({ selectedOption, contributors }) => {
-  console.log(selectedOption, contributors[0]);
   return (
     <ul className="contributors-list">
       {[...contributors]
@@ -17,6 +16,7 @@ const ContributorList = ({ selectedOption, contributors }) => {
         .map((contributor) => (
           <ContributorItem
             key={nanoid()}
+            contributorId={contributor.id}
             name={contributor.login}
             contributions={contributor.contributions}
             repositories={contributor.public_repos}

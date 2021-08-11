@@ -67,6 +67,49 @@ export const fetchContributors = (repositories) => {
   };
 };
 
+export const fetchUserRepos = async (userLogin) => {
+  try {
+    const repos = [];
+    let i = 0;
+    let end = false;
+
+    do {
+      i++;
+      const { data } = await axios.get(
+        `https://api.github.com/users/${userLogin}/repos?per_page=100&page=${i}`,
+        {
+          headers: {
+            Authorization: `token ${GITHUB_TOKEN}`,
+          },
+        }
+      );
+      repos.push(...data);
+      end = !!data.length;
+    } while (end);
+    console.log(repos);
+    return repos;
+  } catch (err) {
+    console.log(`fetchUserRepos error: ${err}`);
+  }
+};
+
+export const fetchUserReposContributors = async (userLogin, repoName) => {
+  try {
+    const { data } = await axios.get(
+      `https://api.github.com/repos/${userLogin}/${repoName}/contributors`,
+      {
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+        },
+      }
+    );
+
+    return await data;
+  } catch (err) {
+    console.log(`fetchUserReposContributors error: ${err}`);
+  }
+};
+
 // FETCH ALL ITEMS FROM API
 
 // const repos = [];
