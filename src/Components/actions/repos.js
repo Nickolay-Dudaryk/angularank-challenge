@@ -4,10 +4,13 @@ import {
   setRepos,
   setContributors,
 } from "../../reducers/reposReduser";
+import dotenv from "dotenv";
 
-require("dotenv").config();
+dotenv.config();
 
-const perPage = 100;
+const GITHUB_TOKEN = process.env.REACT_APP_GITHUB_API_TOKEN;
+
+const perPage = 5;
 
 export const getReposAmount = async () => {
   try {
@@ -40,7 +43,7 @@ export const fetchRepos = (reposAmount) => {
         `https://api.github.com/orgs/angular/repos?per_page=5&page=1`,
         {
           headers: {
-            Authorization: `token ${process.env.GITHUB_API_TOKEN}`,
+            Authorization: `token ${GITHUB_TOKEN}`,
           },
         }
       );
@@ -78,7 +81,7 @@ export const fetchContributors = (repositories) => {
           `${repository.contributors_url}?per_page=5&page=1`,
           {
             headers: {
-              Authorization: `token ${process.env.GITHUB_API_TOKEN}`,
+              Authorization: `token ${GITHUB_TOKEN}`,
             },
           }
         );
