@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchContributors, fetchRepos } from "../Components/actions/repos";
-import ContributorList from "../Components/ContributorList";
-import SingleSelect from "../Components/SingleSelect";
+import React, {useState, useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchContributors, fetchRepos} from "../actions/repos";
+import ContributorList from "../components/ContributorList";
+import SingleSelect from "../components/SingleSelect";
 
 const Contributors = () => {
   const dispatch = useDispatch();
@@ -28,6 +28,7 @@ const Contributors = () => {
   }, [repositories]);
 
   const renderContributors = () => {
+    // TODO: find out why so much function calls going
     console.log("renderContributors");
     return (
       <ContributorList

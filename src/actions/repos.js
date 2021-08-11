@@ -3,7 +3,7 @@ import {
   setIsFetching,
   setRepos,
   setContributors,
-} from "../../reducers/reposReduser";
+} from "../reducers/reposReduser";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -17,7 +17,7 @@ export const fetchRepos = () => {
     try {
       dispatch(setIsFetching(true));
 
-      const { data } = await axios.get(
+      const {data} = await axios.get(
         `https://api.github.com/orgs/angular/repos?per_page=${perPage}&page=1`,
         {
           headers: {
@@ -39,7 +39,7 @@ export const fetchContributors = (repositories) => {
       dispatch(setIsFetching(true));
 
       repositories.map(async (repository) => {
-        const { data } = await axios.get(
+        const {data} = await axios.get(
           `${repository.contributors_url}?per_page=${perPage}&page=1`,
           {
             headers: {
@@ -49,7 +49,7 @@ export const fetchContributors = (repositories) => {
         );
 
         data.forEach(async (el) => {
-          const { data } = await axios.get(
+          const {data} = await axios.get(
             `https://api.github.com/users/${el.login}`
           );
 
@@ -75,7 +75,7 @@ export const fetchUserRepos = async (userLogin) => {
 
     do {
       i++;
-      const { data } = await axios.get(
+      const {data} = await axios.get(
         `https://api.github.com/users/${userLogin}/repos?per_page=100&page=${i}`,
         {
           headers: {
@@ -95,7 +95,7 @@ export const fetchUserRepos = async (userLogin) => {
 
 export const fetchUserReposContributors = async (userLogin, repoName) => {
   try {
-    const { data } = await axios.get(
+    const {data} = await axios.get(
       `https://api.github.com/repos/${userLogin}/${repoName}/contributors`,
       {
         headers: {

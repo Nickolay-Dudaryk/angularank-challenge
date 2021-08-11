@@ -17,7 +17,7 @@ export default function reposReducer(state = defaultState, action) {
       };
     case SET_CONTRIBUTORS:
       const newContributors = [...state.contributors];
-      const { payload } = action;
+      const {payload} = action;
 
       const contributor = newContributors.find(
         (contr) => contr.id === payload.id
@@ -26,6 +26,7 @@ export default function reposReducer(state = defaultState, action) {
       if (!contributor) {
         newContributors.push(payload);
       } else {
+        // TODO: after each page transition contributions increase
         contributor.contributions += payload.contributions;
       }
 
@@ -45,7 +46,7 @@ export default function reposReducer(state = defaultState, action) {
   }
 }
 
-export const setRepos = (repos) => ({ type: SET_REPOS, payload: repos });
+export const setRepos = (repos) => ({type: SET_REPOS, payload: repos});
 export const setContributors = (repos) => ({
   type: SET_CONTRIBUTORS,
   payload: repos,

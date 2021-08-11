@@ -1,7 +1,7 @@
 import React from "react";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import {BrowserRouter, Route, Switch, Redirect} from "react-router-dom";
 import Contributors from "./views/Contributors";
-import Test from "./views/Test";
+import Test from "./views/RepositoryData";
 import Error from "./views/Error";
 import ContributorData from "./views/ContributorData";
 
@@ -9,19 +9,19 @@ const App = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path="/contributors">
-          <Contributors />
+        <Route exact path="/">
+          <Contributors/>
         </Route>
-        <Route exact path="/contributors/:id">
-          <ContributorData />
+        <Route exact path="/:id">
+          <ContributorData/>
         </Route>
         <Route exact path="/repository">
-          <Test />
+          <Test/>
         </Route>
         <Route exact path="/error">
-          <Error />
+          <Error/>
         </Route>
-        <Redirect exact to="/error" />
+        <Redirect exact to="/error"/>
       </Switch>
     </BrowserRouter>
   );

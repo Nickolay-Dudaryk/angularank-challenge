@@ -1,15 +1,15 @@
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import "./ContributorItem.css";
 
 const ContributorItem = ({
-  name,
-  contributorId,
-  contributions,
-  repositories,
-  gists,
-  followers,
-}) => {
+                           name,
+                           contributorId,
+                           contributions,
+                           repositories,
+                           gists,
+                           followers,
+                         }) => {
 
   const router = useHistory();
 
@@ -20,7 +20,7 @@ const ContributorItem = ({
       <span>Repositories: {repositories}</span>
       <span>Gists: {gists}</span>
       <span>Followers: {followers}</span>
-      <button onClick={() => router.push(`/contributors/${contributorId}`)}>details</button>
+      <button onClick={() => router.push(`/${contributorId}`)}>details</button>
     </li>
   );
 };
