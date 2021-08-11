@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchContributors,
-  fetchRepos,
-  getReposAmount,
-} from "./Components/actions/repos";
+import { fetchContributors, fetchRepos } from "./Components/actions/repos";
 import { nanoid } from "nanoid";
 import ContributorItem from "./Components/ContributorItem";
 import SingleSelect from "./Components/SingleSelect";
@@ -17,7 +13,6 @@ const App = () => {
   const isFetching = useSelector((state) => state.repos.isFetching);
 
   const [selectedOption, setSelectedOption] = useState("contributions");
-  const [reposAmount, setReposAmount] = useState(0);
 
   const handleChange = (e) => {
     setSelectedOption(e.target.value);
@@ -26,12 +21,8 @@ const App = () => {
   };
 
   useEffect(() => {
-    (async () => setReposAmount(await getReposAmount()))();
+    dispatch(fetchRepos());
   }, []);
-
-  useEffect(() => {
-    dispatch(fetchRepos(reposAmount));
-  }, [reposAmount]);
 
   useEffect(() => {
     dispatch(fetchContributors(repositories));
@@ -86,5 +77,3 @@ const App = () => {
 };
 
 export default App;
-
-// TODO : sorting

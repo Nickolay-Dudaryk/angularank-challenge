@@ -12,21 +12,10 @@ const GITHUB_TOKEN = process.env.REACT_APP_GITHUB_API_TOKEN;
 
 const perPage = 5;
 
-export const getReposAmount = async () => {
-  try {
-    const { data } = await axios.get("https://api.github.com/orgs/angular");
-
-    return await data.public_repos;
-  } catch (err) {
-    console.log(`getReposAmount error: ${err}`);
-  }
-};
-
-export const fetchRepos = (reposAmount) => {
+export const fetchRepos = () => {
   return async (dispatch) => {
     try {
       dispatch(setIsFetching(true));
-
       // const repos = [];
       // let i = 0;
       // let end = false;
@@ -34,13 +23,18 @@ export const fetchRepos = (reposAmount) => {
       // do {
       //   i++;
       //   const { data } = await axios.get(
-      //     `https://api.github.com/orgs/angular/repos?per_page=${perPage}&page=${i}`
+      //     `https://api.github.com/orgs/angular/repos?per_page=${perPage}&page=${i}`,
+      //     {
+      //       headers: {
+      //         Authorization: `token ${GITHUB_TOKEN}`,
+      //       },
+      //     }
       //   );
       //   repos.push(...data);
       //   end = !!data.length;
       // } while (end);
       const { data } = await axios.get(
-        `https://api.github.com/orgs/angular/repos?per_page=5&page=1`,
+        `https://api.github.com/orgs/angular/repos?per_page=${perPage}&page=1`,
         {
           headers: {
             Authorization: `token ${GITHUB_TOKEN}`,
@@ -49,6 +43,7 @@ export const fetchRepos = (reposAmount) => {
       );
 
       dispatch(setRepos(data));
+      // dispatch(setRepos(repos));
     } catch (err) {
       console.log(`fetchRepos error: ${err}`);
     }
@@ -78,7 +73,7 @@ export const fetchContributors = (repositories) => {
 
       repositories.map(async (repository) => {
         const { data } = await axios.get(
-          `${repository.contributors_url}?per_page=5&page=1`,
+          `${repository.contributors_url}?per_page=${perPage}&page=1`,
           {
             headers: {
               Authorization: `token ${GITHUB_TOKEN}`,
