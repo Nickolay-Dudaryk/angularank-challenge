@@ -3,8 +3,9 @@ import {
   setIsFetching,
   setRepos,
   setContributors,
-  setContributorData,
 } from "../../reducers/reposReduser";
+
+require("dotenv").config();
 
 const perPage = 100;
 
@@ -39,7 +40,7 @@ export const fetchRepos = (reposAmount) => {
         `https://api.github.com/orgs/angular/repos?per_page=5&page=1`,
         {
           headers: {
-            Authorization: "token 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",
+            Authorization: `token ${process.env.GITHUB_API_TOKEN}`,
           },
         }
       );
@@ -87,14 +88,6 @@ export const fetchContributors = (repositories) => {
             `https://api.github.com/users/${el.login}`
           );
 
-          // console.log(
-          //   el,
-          //   contributorData.public_repos,
-          //   contributorData.public_gists,
-          //   contributorData.followers
-          // );
-          console.log({ ...el, ...data });
-
           dispatch(
             setContributors({
               ...el,
@@ -108,26 +101,3 @@ export const fetchContributors = (repositories) => {
     }
   };
 };
-
-// export const fetchContributorData = (contributors) => {
-//   return async (dispatch) => {
-//     try {
-//       dispatch(setIsFetching(true));
-
-//       contributors.map(async (contributor) => {
-//         const { data } = await axios.get(
-//           `https://api.github.com/users/${contributor.login}`,
-//           {
-//             headers: {
-//               Authorization: "token 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",
-//             },
-//           }
-//         );
-
-//         dispatch(setContributorData(data));
-//       });
-//     } catch (err) {
-//       console.log(`fetchContributorData error: ${err}`);
-//     }
-//   };
-// };
