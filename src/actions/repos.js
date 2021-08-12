@@ -118,25 +118,3 @@ export const fetchUserReposContributors = async (userLogin, repoName) => {
     console.log(`fetchUserReposContributors error: ${err.message}`);
   }
 };
-
-// FETCH ALL ITEMS FROM API
-
-// const repos = [];
-// let i = 0;
-// let end = false;
-
-// do {
-//   i++;
-//   const { data } = await axios.get(
-//     `https://api.github.com/orgs/angular/repos?per_page=${perPage}&page=${i}`,
-//     {
-//       headers: {
-//         Authorization: `token ${GITHUB_TOKEN}`,
-//       },
-//     }
-//   );
-//   repos.push(...data);
-//   end = !!data.length;
-// } while (end);
-
-// dispatch(setRepos(repos));

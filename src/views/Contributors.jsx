@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {fetchContributors, fetchRepos} from "../actions/repos";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchContributors, fetchRepos } from "../actions/repos";
 import ContributorList from "../components/ContributorList";
 import SingleSelect from "../components/SingleSelect";
 

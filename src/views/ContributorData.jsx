@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Redirect, useParams } from "react-router";
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { fetchUserRepos } from "../actions/repos";
 import { nanoid } from "nanoid";
 
@@ -47,7 +47,7 @@ const ContributorData = () => {
                       onClick={() =>
                         router.push({
                           pathname: `/repository/${el.id}`,
-                          state: {user: contributor.login, repo: el.name}
+                          state: { user: contributor.login, repo: el.name },
                         })
                       }
                     >
