@@ -20,7 +20,7 @@ const ContributorItem = ({
       <span>Repositories: {repositories}</span>
       <span>Gists: {gists}</span>
       <span>Followers: {followers}</span>
-      <button onClick={() => router.push(`/${contributorId}`)}>details</button>
+      <button onClick={() => router.push(`/contributor/${contributorId}`)}>details</button>
     </li>
   );
 };

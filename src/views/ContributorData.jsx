@@ -1,40 +1,71 @@
-import React, {useState, useEffect} from 'react';
-import {useSelector} from 'react-redux';
-import {useParams} from 'react-router';
-import {Link} from 'react-router-dom';
-import {fetchUserRepos} from '../actions/repos';
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { Redirect, useParams } from "react-router";
+import {useHistory} from "react-router-dom";
+import { fetchUserRepos } from "../actions/repos";
+import { nanoid } from "nanoid";
 
 const ContributorData = () => {
-  const [repos, setRepos] = useState({});
   const params = useParams();
   const contributors = useSelector((state) => state.repos.contributors);
-  const contributor = contributors.find(item => item.id === +params.id);
+  const contributor = contributors.find((item) => item.id === +params.id);
 
-  // useEffect(() => {
-  //     fetchUserRepos(contributor.login);
-  //     setRepos()
-  // }, []);
+  const [repos, setRepos] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // TODO: custom useFetch hook to get contributor data here
+  const router = useHistory();
 
+  useEffect(() => {
+    setIsLoading(true);
+
+    const repoData = async () => {
+      const data = await fetchUserRepos(contributor.login);
+
+      setRepos(data);
+      setIsLoading(false);
+    };
+
+    contributor && repoData();
+  }, [contributor]);
 
   return (
-    <div>
-      <h2>Repositories were {contributor.login} contributed</h2>
-      <Link to="/">Back to all contributors</Link>
+    <>
+      {contributor ? (
+        <div>
+          <h2>Repositories were {contributor.login} contributed</h2>
+          <button onClick={router.goBack}>Go back to contributors</button>
 
-      {/* <ul>
-                {
-                    repos.map(el => {
-                        return <li>{el.name}</li>
-                    })
-                }
-            </ul> */}
-    </div>
-  )
-}
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : (
+            <ul className="contributors-list">
+              {repos.map((el) => {
+                return (
+                  <li className="contributor-item" key={nanoid()}>
+                    Repository name: {el.name}
+                    <button
+                      onClick={() =>
+                        router.push({
+                          pathname: `/repository/${el.id}`,
+                          state: {user: contributor.login, repo: el.name}
+                        })
+                      }
+                    >
+                      details
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+      ) : (
+        <Redirect to="/error" />
+      )}
+    </>
+  );
+};
 
 export default ContributorData;
 
-// TODO: create list of contributor data (use already existing styles)
 // TODO: ul => new separate component

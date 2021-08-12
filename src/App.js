@@ -1,7 +1,7 @@
 import React from "react";
-import {BrowserRouter, Route, Switch, Redirect} from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import Contributors from "./views/Contributors";
-import Test from "./views/RepositoryData";
+import RepositoryData from "./views/RepositoryData";
 import Error from "./views/Error";
 import ContributorData from "./views/ContributorData";
 
@@ -10,18 +10,18 @@ const App = () => {
     <BrowserRouter>
       <Switch>
         <Route exact path="/">
-          <Contributors/>
+          <Contributors />
         </Route>
-        <Route exact path="/:id">
-          <ContributorData/>
+        <Route exact path="/contributor/:id">
+          <ContributorData />
         </Route>
-        <Route exact path="/repository">
-          <Test/>
+        <Route exact path="/repository/:id">
+          <RepositoryData />
         </Route>
-        <Route exact path="/error">
-          <Error/>
+        <Route path="/error">
+          <Error />
         </Route>
-        <Redirect exact to="/error"/>
+        <Redirect to="/error" />
       </Switch>
     </BrowserRouter>
   );
