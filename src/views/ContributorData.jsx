@@ -43,6 +43,7 @@ const ContributorData = () => {
                 return (
                   <li className="contributor-item" key={nanoid()}>
                     Repository name: {el.name}
+                    <a href={el.html_url} target="_blank" rel="noreferrer">Repo Link</a>
                     <button
                       onClick={() =>
                         router.push({

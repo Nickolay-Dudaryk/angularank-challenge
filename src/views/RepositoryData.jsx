@@ -41,6 +41,7 @@ const RepositoryData = () => {
             return (
               <li className="contributor-item" key={nanoid()}>
                 Contributor name: {el.login}
+                <a href={el.html_url} target="_blank" rel="noreferrer">Github link</a>
               </li>
             );
           })}

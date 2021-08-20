@@ -3,8 +3,8 @@ import { nanoid } from "nanoid";
 
 const options = [
   { value: "contributions", label: "Contributions" },
-  { value: "public_repos", label: "Repositories" },
-  { value: "public_gists", label: "Gists" },
+  { value: "repos", label: "Repositories" },
+  { value: "gists", label: "Gists" },
   { value: "followers", label: "Followers" },
   { value: "login", label: "Name" },
 ];
@@ -19,7 +19,7 @@ const SingleSelect = ({ selectedOption, handleChange }) => {
   return (
     <label>
       Sort by
-      <select value={selectedOption.value} onChange={handleChange}>
+      <select value={selectedOption} onChange={handleChange}>
         {optionsArray}
       </select>
     </label>

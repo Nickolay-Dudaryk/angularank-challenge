@@ -1,10 +1,12 @@
 const SET_REPOS = "SET_REPOS";
 const SET_CONTRIBUTORS = "SET_CONTRIBUTORS";
+const SET_CONTRIBUTORS_DATA = "SET_CONTRIBUTORS_DATA";
 const SET_IS_FETCHING = "SET_IS_FETCHING";
 
 const defaultState = {
   repositories: [],
   contributors: [],
+  contributorsData: [],
   isFetching: true,
 };
 
@@ -14,28 +16,20 @@ export default function reposReducer(state = defaultState, action) {
       return {
         ...state,
         repositories: action.payload,
+        // isFetching: false,
       };
     case SET_CONTRIBUTORS:
-      const newContributors = [...state.contributors];
-      const {payload} = action;
-
-      const contributor = newContributors.find(
-        (contr) => contr.id === payload.id
-      );
-
-      if (!contributor) {
-        newContributors.push(payload);
-      } else {
-        // TODO: after each page transition contributions increase
-        contributor.contributions += payload.contributions;
-      }
-
       return {
         ...state,
-        contributors: newContributors,
-        isFetching: false,
+        contributors: action.payload,
+        // isFetching: false,
       };
-
+    case SET_CONTRIBUTORS_DATA:
+      return {
+        ...state,
+        contributorsData: action.payload,
+        // isFetching: false,
+      };
     case SET_IS_FETCHING:
       return {
         ...state,
@@ -46,9 +40,13 @@ export default function reposReducer(state = defaultState, action) {
   }
 }
 
-export const setRepos = (repos) => ({type: SET_REPOS, payload: repos});
+export const setRepos = (repos) => ({ type: SET_REPOS, payload: repos });
 export const setContributors = (repos) => ({
   type: SET_CONTRIBUTORS,
+  payload: repos,
+});
+export const setContributorsData = (repos) => ({
+  type: SET_CONTRIBUTORS_DATA,
   payload: repos,
 });
 export const setIsFetching = (bool) => ({

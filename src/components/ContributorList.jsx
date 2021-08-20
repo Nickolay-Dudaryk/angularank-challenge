@@ -19,8 +19,8 @@ const ContributorList = ({ selectedOption, contributors }) => {
             contributorId={contributor.id}
             name={contributor.login}
             contributions={contributor.contributions}
-            repositories={contributor.public_repos}
-            gists={contributor.public_gists}
+            repositories={contributor.repos}
+            gists={contributor.gists}
             followers={contributor.followers}
           />
         ))}
