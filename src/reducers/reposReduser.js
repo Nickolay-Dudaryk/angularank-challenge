@@ -16,19 +16,17 @@ export default function reposReducer(state = defaultState, action) {
       return {
         ...state,
         repositories: action.payload,
-        // isFetching: false,
       };
     case SET_CONTRIBUTORS:
       return {
         ...state,
         contributors: action.payload,
-        // isFetching: false,
       };
     case SET_CONTRIBUTORS_DATA:
       return {
         ...state,
         contributorsData: action.payload,
-        // isFetching: false,
+        isFetching: false,
       };
     case SET_IS_FETCHING:
       return {

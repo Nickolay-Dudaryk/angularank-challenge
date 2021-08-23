@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchContributors,
@@ -15,7 +15,6 @@ const Contributors = () => {
   const contributors = useSelector((state) => state.repos.contributors);
   const contributorsData = useSelector((state) => state.repos.contributorsData);
   const isFetching = useSelector((state) => state.repos.isFetching);
-  const isInitialMount = useRef(true);
 
   const [selectedOption, setSelectedOption] = useState("contributions");
 
@@ -26,11 +25,7 @@ const Contributors = () => {
   }, []);
 
   useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false
-    } else {
-      dispatch(fetchContributors(repositories));
-    }
+    dispatch(fetchContributors(repositories));
   }, [repositories]);
 
   useEffect(() => {
