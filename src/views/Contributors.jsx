@@ -21,7 +21,9 @@ const Contributors = () => {
   const handleChange = (e) => setSelectedOption(e.target.value);
 
   useEffect(() => {
-    dispatch(fetchRepos());
+    if (repositories.length < 1) {
+      dispatch(fetchRepos());
+    }
   }, []);
 
   useEffect(() => {

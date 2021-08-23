@@ -1,6 +1,5 @@
 import axios from "axios";
 import {
-  setIsFetching,
   setRepos,
   setContributors,
   setContributorsData,
@@ -11,7 +10,7 @@ dotenv.config();
 
 const GITHUB_TOKEN = process.env.REACT_APP_GITHUB_API_TOKEN;
 
-const perPage = 10;
+const perPage = 4;
 
 export const fetchRepos = () => {
   return async (dispatch) => {
@@ -38,17 +37,14 @@ export const fetchContributors = (repositories) => {
       const contributorsArr = [];
 
       for (let i = 0; i < repositories.length; i++) {
-        const { contributors_url } = repositories[i];
+        const { contributors_url: url } = repositories[i];
         const isLastIteration = i === repositories.length - 1;
 
-        const { data } = await axios.get(
-          `${contributors_url}?per_page=${perPage}&page=1`,
-          {
-            headers: {
-              Authorization: `token ${GITHUB_TOKEN}`,
-            },
-          }
-        );
+        const { data } = await axios.get(`${url}?per_page=${perPage}&page=1`, {
+          headers: {
+            Authorization: `token ${GITHUB_TOKEN}`,
+          },
+        });
 
         data.forEach((el) => {
           const { id, login, contributions } = el;

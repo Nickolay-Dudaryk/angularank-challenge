@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { nanoid } from "nanoid";
-import { useLocation } from "react-router";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { fetchUserReposContributors } from "../actions/repos";
+import Link from "../components/Link";
 
 const RepositoryData = () => {
   const location = useLocation();
@@ -15,15 +15,12 @@ const RepositoryData = () => {
 
   useEffect(() => {
     setIsLoading(true);
-
-    const contributorsData = async () => {
+    (async () => {
       const data = await fetchUserReposContributors(user, repo);
 
       setContributors(data);
       setIsLoading(false);
-    };
-
-    contributorsData();
+    })();
   }, [user, repo]);
 
   return (
@@ -38,10 +35,12 @@ const RepositoryData = () => {
       ) : (
         <ul className="contributors-list">
           {contributors.map((el) => {
+            const { login, html_url: url } = el;
+
             return (
               <li className="contributor-item" key={nanoid()}>
-                Contributor name: {el.login}
-                <a href={el.html_url} target="_blank" rel="noreferrer">Github link</a>
+                Contributor name: {login}
+                <Link url={url} title={"Github link"} />
               </li>
             );
           })}

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Redirect, useParams } from "react-router";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams, Redirect } from "react-router-dom";
 import { fetchUserRepos } from "../actions/repos";
-import { nanoid } from "nanoid";
+import RepositoriesList from "../components/RepositoriesList";
 
 const ContributorData = () => {
   const params = useParams();
@@ -38,26 +37,7 @@ const ContributorData = () => {
           {isLoading ? (
             <p>Loading...</p>
           ) : (
-            <ul className="contributors-list">
-              {repos.map((el) => {
-                return (
-                  <li className="contributor-item" key={nanoid()}>
-                    Repository name: {el.name}
-                    <a href={el.html_url} target="_blank" rel="noreferrer">Repo Link</a>
-                    <button
-                      onClick={() =>
-                        router.push({
-                          pathname: `/repository/${el.id}`,
-                          state: { user: contributor.login, repo: el.name },
-                        })
-                      }
-                    >
-                      details
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
+            <RepositoriesList contributor={contributor} repos={repos} />
           )}
         </div>
       ) : (
@@ -68,5 +48,3 @@ const ContributorData = () => {
 };
 
 export default ContributorData;
-
-// TODO: ul => new separate component

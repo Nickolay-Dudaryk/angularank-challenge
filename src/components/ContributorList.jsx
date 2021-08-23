@@ -16,7 +16,7 @@ const ContributorList = ({ selectedOption, contributors }) => {
         .map((contributor) => (
           <ContributorItem
             key={nanoid()}
-            contributorId={contributor.id}
+            id={contributor.id}
             name={contributor.login}
             contributions={contributor.contributions}
             repositories={contributor.repos}
