@@ -4,11 +4,7 @@ import {
   setContributors,
   setContributorsData,
 } from "../reducers/reposReduser";
-import dotenv from "dotenv";
-
-dotenv.config();
-
-const GITHUB_TOKEN = process.env.REACT_APP_GITHUB_API_TOKEN;
+import { headers } from "../constants";
 
 const perPage = 2;
 
@@ -18,13 +14,26 @@ export const fetchRepos = () => {
       const { data } = await axios.get(
         `https://api.github.com/orgs/angular/repos?per_page=${perPage}&page=1`,
         {
-          headers: {
-            Authorization: `token ${GITHUB_TOKEN}`,
-          },
+          headers: headers,
         }
       );
 
-      dispatch(setRepos(data));
+      const reposArr = [];
+
+      for (let i = 0; i < data.length; i++) {
+        const isLastIteration = i === data.length - 1;
+        const { id, name, contributors_url } = data[i];
+
+        reposArr.push({
+          id: id,
+          name: name,
+          contributors_url: contributors_url,
+        });
+
+        if (isLastIteration) {
+          dispatch(setRepos(reposArr));
+        }
+      }
     } catch (err) {
       console.log(`fetchRepos error: ${err.message}`);
     }
@@ -41,9 +50,7 @@ export const fetchContributors = (repositories) => {
         const isLastIteration = i === repositories.length - 1;
 
         const { data } = await axios.get(`${url}?per_page=${perPage}&page=1`, {
-          headers: {
-            Authorization: `token ${GITHUB_TOKEN}`,
-          },
+          headers: headers,
         });
 
         data.forEach((el) => {
@@ -81,9 +88,7 @@ export const fetchContributorsData = (contributors) => {
         const { data } = await axios.get(
           `https://api.github.com/users/${login}`,
           {
-            headers: {
-              Authorization: `token ${GITHUB_TOKEN}`,
-            },
+            headers: headers,
           }
         );
         const { followers, public_gists: gists, public_repos: repos } = data;
@@ -119,9 +124,7 @@ export const fetchUserRepos = async (userLogin) => {
       const { data } = await axios.get(
         `https://api.github.com/users/${userLogin}/repos?per_page=100&page=${i}`,
         {
-          headers: {
-            Authorization: `token ${GITHUB_TOKEN}`,
-          },
+          headers: headers,
         }
       );
       repos.push(...data);
@@ -145,9 +148,7 @@ export const fetchUserReposContributors = async (userLogin, repoName) => {
       const { data } = await axios.get(
         `https://api.github.com/repos/${userLogin}/${repoName}/contributors?per_page=100&page=${i}`,
         {
-          headers: {
-            Authorization: `token ${GITHUB_TOKEN}`,
-          },
+          headers: headers,
         }
       );
       repoContributors.push(...data);

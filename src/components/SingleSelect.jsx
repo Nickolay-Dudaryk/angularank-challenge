@@ -1,16 +1,9 @@
 import React from "react";
 import { nanoid } from "nanoid";
-
-const options = [
-  { value: "contributions", label: "Contributions" },
-  { value: "repos", label: "Repositories" },
-  { value: "gists", label: "Gists" },
-  { value: "followers", label: "Followers" },
-  { value: "login", label: "Name" },
-];
+import { sortingOptions } from "../constants";
 
 const SingleSelect = ({ selectedOption, handleChange }) => {
-  const optionsArray = options.map(({ value, label }) => (
+  const optionsArray = sortingOptions.map(({ value, label }) => (
     <option value={value} key={nanoid()}>
       {label}
     </option>
