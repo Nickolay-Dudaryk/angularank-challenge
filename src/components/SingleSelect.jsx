@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { nanoid } from "nanoid";
 import { sortingOptions } from "../constants";
 
@@ -10,13 +11,18 @@ const SingleSelect = ({ selectedOption, handleChange }) => {
   ));
 
   return (
-    <label>
+    <label htmlFor="select">
       Sort by
-      <select value={selectedOption} onChange={handleChange}>
+      <select id="select" value={selectedOption} onChange={handleChange}>
         {optionsArray}
       </select>
     </label>
   );
+};
+
+SingleSelect.propTypes = {
+  selectedOption: PropTypes.string.isRequired,
+  handleChange: PropTypes.func.isRequired,
 };
 
 export default SingleSelect;

@@ -16,23 +16,22 @@ const ContributorData = () => {
 
   useEffect(() => {
     setIsLoading(true);
-
-    const repoData = async () => {
+    (async () => {
       const data = await fetchUserRepos(contributor.login);
 
       setRepos(data);
       setIsLoading(false);
-    };
-
-    contributor && repoData();
+    })();
   }, [contributor]);
 
   return (
     <>
       {contributor ? (
         <div>
-          <h2>Repositories were {contributor.login} contributed</h2>
-          <button onClick={router.goBack}>Go back to contributors</button>
+          <h2>{`Repositories were ${contributor.login} contributed`}</h2>
+          <button type="button" onClick={router.goBack}>
+            Go back to contributors
+          </button>
 
           {isLoading ? (
             <p>Loading...</p>

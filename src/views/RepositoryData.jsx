@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { nanoid } from "nanoid";
 import { Redirect, useHistory, useLocation } from "react-router-dom";
 import { fetchUserReposContributors } from "../actions/repos";
-import Link from "../components/Link";
+import LinkBtn from "../components/LinkBtn";
 
 const RepositoryData = () => {
   const location = useLocation();
@@ -27,12 +27,11 @@ const RepositoryData = () => {
     <>
       {user ? (
         <div>
-          <h2>
-            {user} user {repo} repository contributors page
-          </h2>
-          <button onClick={router.goBack}>
-            Go back to {user} repositories
-          </button>
+          <h2>{`${user} user ${repo} repository contributors page`}</h2>
+          <button
+            type="button"
+            onClick={router.goBack}
+          >{`Go back to ${user} repositories`}</button>
 
           {isLoading ? (
             <p>Loading...</p>
@@ -43,8 +42,9 @@ const RepositoryData = () => {
 
                 return (
                   <li className="contributor-item" key={nanoid()}>
-                    Contributor name: {login}
-                    <Link url={url} title={"Github link"} />
+                    Contributor name:
+                    {login}
+                    <LinkBtn url={url} title="Github link" />
                   </li>
                 );
               })}

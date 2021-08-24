@@ -7,7 +7,9 @@ const rootReducer = combineReducers({
   repos: reposReducer,
 });
 
-export const store = createStore(
+const store = createStore(
   rootReducer,
   composeWithDevTools(applyMiddleware(thunk))
 );
+
+export default store;
