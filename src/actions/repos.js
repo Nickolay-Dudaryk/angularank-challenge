@@ -10,7 +10,7 @@ dotenv.config();
 
 const GITHUB_TOKEN = process.env.REACT_APP_GITHUB_API_TOKEN;
 
-const perPage = 4;
+const perPage = 2;
 
 export const fetchRepos = () => {
   return async (dispatch) => {

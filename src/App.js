@@ -12,10 +12,10 @@ const App = () => {
         <Route exact path="/">
           <Contributors />
         </Route>
-        <Route exact path="/contributor/:id">
+        <Route path="/contributor/:id">
           <ContributorData />
         </Route>
-        <Route exact path="/repository/:id">
+        <Route path="/repository/:id">
           <RepositoryData />
         </Route>
         <Route path="/error">
