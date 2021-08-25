@@ -10,7 +10,7 @@ const defaultState = {
   isFetching: true,
 };
 
-export default function reposReducer(state = defaultState, action) {
+export default function apiReducer(state = defaultState, action) {
   switch (action.type) {
     case SET_REPOS:
       return {
@@ -38,14 +38,17 @@ export default function reposReducer(state = defaultState, action) {
   }
 }
 
-export const setRepos = (repos) => ({ type: SET_REPOS, payload: repos });
-export const setContributors = (repos) => ({
-  type: SET_CONTRIBUTORS,
-  payload: repos,
+export const setRepos = (githubApi) => ({
+  type: SET_REPOS,
+  payload: githubApi,
 });
-export const setContributorsData = (repos) => ({
+export const setContributors = (githubApi) => ({
+  type: SET_CONTRIBUTORS,
+  payload: githubApi,
+});
+export const setContributorsData = (githubApi) => ({
   type: SET_CONTRIBUTORS_DATA,
-  payload: repos,
+  payload: githubApi,
 });
 export const setIsFetching = (bool) => ({
   type: SET_IS_FETCHING,

@@ -6,7 +6,7 @@ import {
   setRepos,
   setContributors,
   setContributorsData,
-} from "../reducers/reposReduser";
+} from "../reducers/apiReducer";
 import { headers, perPage } from "../constants";
 
 let reposAmount = null;
@@ -67,7 +67,7 @@ export const fetchContributors = (repositories) => async (dispatch) => {
       const { url } = repositories[i];
       const isLastIteration = i === repositories.length - 1;
 
-      const { data } = await axios.get(`${url}?per_page=3&page=1`, {
+      const { data } = await axios.get(`${url}?per_page=1&page=1`, {
         headers,
       });
 

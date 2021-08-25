@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { nanoid } from "nanoid";
 import { Redirect, useHistory, useLocation } from "react-router-dom";
-import { fetchUserReposContributors } from "../actions/repos";
+import { fetchUserReposContributors } from "../actions/api";
 import LinkBtn from "../components/LinkBtn";
 
 const RepositoryData = () => {

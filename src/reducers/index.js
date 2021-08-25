@@ -1,10 +1,10 @@
 import { combineReducers, createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
-import reposReducer from "./reposReduser";
+import apiReducer from "./apiReducer";
 
 const rootReducer = combineReducers({
-  repos: reposReducer,
+  githubApi: apiReducer,
 });
 
 const store = createStore(

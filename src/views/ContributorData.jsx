@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useHistory, useParams, Redirect } from "react-router-dom";
-import { fetchUserRepos } from "../actions/repos";
+import { fetchUserRepos } from "../actions/api";
 import RepositoriesList from "../components/RepositoriesList";
 
 const ContributorData = () => {

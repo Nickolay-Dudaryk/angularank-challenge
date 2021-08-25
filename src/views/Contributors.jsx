@@ -4,17 +4,19 @@ import {
   fetchContributors,
   fetchContributorsData,
   fetchRepos,
-} from "../actions/repos";
+} from "../actions/api";
 import ContributorList from "../components/ContributorList";
 import SingleSelect from "../components/SingleSelect";
 
 const Contributors = () => {
   const dispatch = useDispatch();
 
-  const repositories = useSelector((state) => state.repos.repositories);
-  const contributors = useSelector((state) => state.repos.contributors);
-  const contributorsData = useSelector((state) => state.repos.contributorsData);
-  const isFetching = useSelector((state) => state.repos.isFetching);
+  const repositories = useSelector((state) => state.githubApi.repositories);
+  const contributors = useSelector((state) => state.githubApi.contributors);
+  const contributorsData = useSelector(
+    (state) => state.githubApi.contributorsData
+  );
+  const isFetching = useSelector((state) => state.githubApi.isFetching);
 
   const [selectedOption, setSelectedOption] = useState("contributions");
 
