@@ -7,7 +7,8 @@ import RepositoriesList from "../components/RepositoriesList";
 const ContributorData = () => {
   const params = useParams();
   const contributors = useSelector((state) => state.repos.contributors);
-  const contributor = contributors.find((item) => item.id === +params.id);
+  const contributor =
+    contributors.find((item) => item.id === +params.id) || null;
 
   const [repos, setRepos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -17,10 +18,14 @@ const ContributorData = () => {
   useEffect(() => {
     setIsLoading(true);
     (async () => {
-      const data = await fetchUserRepos(contributor.login);
+      if (contributor) {
+        const data = await fetchUserRepos(contributor.login);
 
-      setRepos(data);
-      setIsLoading(false);
+        setRepos(data);
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
+      }
     })();
   }, [contributor]);
 

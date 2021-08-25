@@ -21,8 +21,7 @@ const RepositoriesList = ({ contributor, repos }) => {
 
         return (
           <li className="contributor-item" key={nanoid()}>
-            Repository name:
-            {name}
+            {`Repository name: ${name}`}
             <LinkBtn url={url} title="Repo Link" />
             <button type="button" onClick={() => handleClick(id, name)}>
               details

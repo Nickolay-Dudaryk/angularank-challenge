@@ -10,7 +10,7 @@ import {
 } from "../reducers/reposReduser";
 import { headers } from "../constants";
 
-const perPage = 2;
+const perPage = 10;
 
 export const fetchRepos = () => async (dispatch) => {
   try {
