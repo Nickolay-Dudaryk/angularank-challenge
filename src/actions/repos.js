@@ -2,39 +2,56 @@
 /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
 
 import axios from "axios";
-
 import {
   setRepos,
   setContributors,
   setContributorsData,
 } from "../reducers/reposReduser";
-import { headers } from "../constants";
+import { headers, perPage } from "../constants";
 
-const perPage = 10;
+let reposAmount = null;
+
+const getReposAmount = async () => {
+  try {
+    const { data } = await axios.get(`https://api.github.com/orgs/angular`, {
+      headers,
+    });
+
+    const { public_repos: amount } = data;
+
+    reposAmount = amount;
+  } catch (err) {
+    console.error(`getReposAmount error: ${err}`);
+  }
+};
 
 export const fetchRepos = () => async (dispatch) => {
   try {
-    const { data } = await axios.get(
-      `https://api.github.com/orgs/angular/repos?per_page=${perPage}&page=1`,
-      {
-        headers,
-      }
-    );
+    if (!reposAmount) {
+      await getReposAmount();
+    }
 
-    const reposArr = [];
+    const iterationsAmount = Math.ceil(reposAmount / perPage);
 
-    for (let i = 0; i < data.length; i += 1) {
-      const isLastIteration = i === data.length - 1;
-      const { id, name, contributors_url: url } = data[i];
+    const repos = [];
 
-      reposArr.push({
-        id,
-        name,
-        url,
+    for (let i = 0; i < iterationsAmount; i += 1) {
+      const isLastIteration = i === iterationsAmount - 1;
+
+      const { data } = await axios.get(
+        `https://api.github.com/orgs/angular/repos?per_page=${perPage}&page=${i}`,
+        {
+          headers,
+        }
+      );
+
+      data.forEach((repo) => {
+        const { id, name, contributors_url: url } = repo;
+        repos.push({ id, name, url });
       });
 
       if (isLastIteration) {
-        dispatch(setRepos(reposArr));
+        dispatch(setRepos(repos));
       }
     }
   } catch (err) {
@@ -50,7 +67,7 @@ export const fetchContributors = (repositories) => async (dispatch) => {
       const { url } = repositories[i];
       const isLastIteration = i === repositories.length - 1;
 
-      const { data } = await axios.get(`${url}?per_page=${perPage}&page=1`, {
+      const { data } = await axios.get(`${url}?per_page=3&page=1`, {
         headers,
       });
 
@@ -61,11 +78,7 @@ export const fetchContributors = (repositories) => async (dispatch) => {
         if (contributor) {
           contributor.contributions += contributions;
         } else {
-          contributorsArr.push({
-            login,
-            id,
-            contributions,
-          });
+          contributorsArr.push({ login, id, contributions });
         }
       });
 
@@ -120,7 +133,7 @@ export const fetchUserRepos = async (userLogin) => {
     do {
       i += 1;
       const { data } = await axios.get(
-        `https://api.github.com/users/${userLogin}/repos?per_page=100&page=${i}`,
+        `https://api.github.com/users/${userLogin}/repos?per_page=${perPage}&page=${i}`,
         {
           headers,
         }
@@ -145,7 +158,7 @@ export const fetchUserReposContributors = async (userLogin, repoName) => {
     do {
       i += 1;
       const { data } = await axios.get(
-        `https://api.github.com/repos/${userLogin}/${repoName}/contributors?per_page=100&page=${i}`,
+        `https://api.github.com/repos/${userLogin}/${repoName}/contributors?per_page=${perPage}&page=${i}`,
         {
           headers,
         }

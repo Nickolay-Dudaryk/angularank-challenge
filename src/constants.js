@@ -12,3 +12,5 @@ export const sortingOptions = [
   { value: "followers", label: "Followers" },
   { value: "login", label: "Name" },
 ];
+
+export const perPage = 100;

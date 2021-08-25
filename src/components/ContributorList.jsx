@@ -30,6 +30,7 @@ const ContributorList = ({ selectedOption, contributors }) => {
           />
         );
       })}
+      <button type="button">Load more</button>
     </ul>
   );
 };

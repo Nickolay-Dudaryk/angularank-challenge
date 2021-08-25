@@ -12,7 +12,7 @@ const SingleSelect = ({ selectedOption, handleChange }) => {
 
   return (
     <label htmlFor="select">
-      Sort by
+      {"Sort by "}
       <select id="select" value={selectedOption} onChange={handleChange}>
         {optionsArray}
       </select>
