@@ -6,12 +6,11 @@ import {
   setRepos,
   setContributors,
   setContributorsData,
+  // setIsFetching,
 } from "../reducers/apiReducer";
 import { headers, perPage } from "../constants";
 
-let reposAmount = null;
-
-const getReposAmount = async () => {
+export const getReposAmount = async () => {
   try {
     const { data } = await axios.get(`https://api.github.com/orgs/angular`, {
       headers,
@@ -19,39 +18,32 @@ const getReposAmount = async () => {
 
     const { public_repos: amount } = data;
 
-    reposAmount = amount;
+    return amount;
   } catch (err) {
     console.error(`getReposAmount error: ${err}`);
+    return undefined;
   }
 };
 
-export const fetchRepos = () => async (dispatch) => {
+export const fetchRepos = (amountFetchedRepos) => async (dispatch) => {
   try {
-    if (!reposAmount) {
-      await getReposAmount();
-    }
-
-    const iterationsAmount = Math.ceil(reposAmount / perPage);
-
+    // dispatch(setIsFetching(true));
     const repos = [];
 
-    for (let i = 0; i < iterationsAmount; i += 1) {
-      const isLastIteration = i === iterationsAmount - 1;
+    const { data } = await axios.get(
+      `https://api.github.com/orgs/angular/repos?per_page=1&page=${amountFetchedRepos}`,
+      {
+        headers,
+      }
+    );
 
-      const { data } = await axios.get(
-        `https://api.github.com/orgs/angular/repos?per_page=${perPage}&page=${i}`,
-        {
-          headers,
-        }
-      );
-
-      data.forEach((repo) => {
-        const { id, name, contributors_url: url } = repo;
-        repos.push({ id, name, url });
-      });
+    for (let i = 0; i < data.length; i += 1) {
+      const isLastIteration = i === data.length - 1;
+      const { id, name, contributors_url: url } = data[i];
+      repos.push({ id, name, url });
 
       if (isLastIteration) {
-        dispatch(setRepos(repos));
+        dispatch(setRepos(...repos));
       }
     }
   } catch (err) {
@@ -67,7 +59,7 @@ export const fetchContributors = (repositories) => async (dispatch) => {
       const { url } = repositories[i];
       const isLastIteration = i === repositories.length - 1;
 
-      const { data } = await axios.get(`${url}?per_page=1&page=1`, {
+      const { data } = await axios.get(`${url}?per_page=${perPage}&page=1`, {
         headers,
       });
 
@@ -117,6 +109,7 @@ export const fetchContributorsData = (contributors) => async (dispatch) => {
 
       if (isLastIteration) {
         dispatch(setContributorsData(contrDataArr));
+        // dispatch(setIsFetching(false));
       }
     }
   } catch (err) {

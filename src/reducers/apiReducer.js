@@ -15,17 +15,20 @@ export default function apiReducer(state = defaultState, action) {
     case SET_REPOS:
       return {
         ...state,
-        repositories: action.payload,
+        repositories:
+          state.repositories.length < 1
+            ? [action.payload]
+            : [...state.repositories, action.payload],
       };
     case SET_CONTRIBUTORS:
       return {
         ...state,
-        contributors: action.payload,
+        contributors: [...action.payload],
       };
     case SET_CONTRIBUTORS_DATA:
       return {
         ...state,
-        contributorsData: action.payload,
+        contributorsData: [...action.payload],
         isFetching: false,
       };
     case SET_IS_FETCHING:

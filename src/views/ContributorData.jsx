@@ -6,7 +6,7 @@ import RepositoriesList from "../components/RepositoriesList";
 
 const ContributorData = () => {
   const params = useParams();
-  const contributors = useSelector((state) => state.repos.contributors);
+  const contributors = useSelector((state) => state.githubApi.contributors);
   const contributor =
     contributors.find((item) => item.id === +params.id) || null;
 

@@ -42,8 +42,7 @@ const RepositoryData = () => {
 
                 return (
                   <li className="contributor-item" key={nanoid()}>
-                    Contributor name:
-                    {login}
+                    {`Contributor name: ${login}`}
                     <LinkBtn url={url} title="Github link" />
                   </li>
                 );
