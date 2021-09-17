@@ -13,4 +13,4 @@ export const sortingOptions = [
   { value: "login", label: "Name" },
 ];
 
-export const perPage = 100;
+export const perPage = 2;

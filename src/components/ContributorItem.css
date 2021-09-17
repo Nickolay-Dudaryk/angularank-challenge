@@ -12,3 +12,7 @@
 .contributor-item:last-child {
   margin-bottom: 0;
 }
+
+.load-more-btn {
+  margin: 20px 0;
+}

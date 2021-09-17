@@ -1,19 +1,20 @@
-import axios from "axios";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  // getReposAmount,
+  getReposAmount,
   fetchContributors,
   fetchContributorsData,
   fetchRepos,
 } from "../actions/api";
 import ContributorList from "../components/ContributorList";
 import SingleSelect from "../components/SingleSelect";
-import { headers } from "../constants";
 
 const Contributors = () => {
   const dispatch = useDispatch();
 
+  const amountOfAllRepos = useSelector(
+    (state) => state.githubApi.amountOfAllRepos
+  );
   const repositories = useSelector((state) => state.githubApi.repositories);
   const contributors = useSelector((state) => state.githubApi.contributors);
   const contributorsData = useSelector(
@@ -22,44 +23,31 @@ const Contributors = () => {
   const isFetching = useSelector((state) => state.githubApi.isFetching);
 
   const [selectedOption, setSelectedOption] = useState("contributions");
-  const [amountOfAllRepos, setAmountOfAllRepos] = useState(null);
   const [amountFetchedRepos, setAmountFetchedRepos] = useState(1);
 
   const handleChange = (e) => setSelectedOption(e.target.value);
 
-  const getRepositoriesAmount = useCallback(async () => {
-    const { data } = await axios.get(`https://api.github.com/orgs/angular`, {
-      headers,
-    });
-
-    const { public_repos: amount } = data;
-
-    return amount;
-  });
+  useEffect(() => {
+    if (amountOfAllRepos < 1) {
+      dispatch(getReposAmount());
+    }
+  }, []);
 
   useEffect(() => {
-    if (!amountOfAllRepos) {
-      console.log(amountOfAllRepos);
-      console.log(`getReposAmount is working`);
-      // (async () => {
-      //   setAmountOfAllRepos(await getReposAmount());
-      // })();
-      setAmountOfAllRepos(getRepositoriesAmount());
-    }
-  }, [getRepositoriesAmount]);
-
-  React.useMemo(() => {
-    console.log(amountOfAllRepos);
-    console.log(amountFetchedRepos);
     dispatch(fetchRepos(amountFetchedRepos));
   }, [amountFetchedRepos]);
 
-  React.useMemo(() => {
-    dispatch(fetchContributors(repositories));
+  useEffect(() => {
+    if (repositories.length > 0) {
+      const lastRepo = repositories[repositories.length - 1];
+      dispatch(fetchContributors(lastRepo, contributors || []));
+    }
   }, [repositories]);
 
-  React.useMemo(() => {
-    dispatch(fetchContributorsData(contributors));
+  useEffect(() => {
+    if (contributors.length > 0) {
+      dispatch(fetchContributorsData(contributors, contributorsData || []));
+    }
   }, [contributors]);
 
   const loadMoreBtnHandleClick = () => {

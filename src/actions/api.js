@@ -3,14 +3,15 @@
 
 import axios from "axios";
 import {
+  setAmountOfAllRepos,
   setRepos,
   setContributors,
   setContributorsData,
-  // setIsFetching,
+  setIsFetching,
 } from "../reducers/apiReducer";
 import { headers, perPage } from "../constants";
 
-export const getReposAmount = async () => {
+export const getReposAmount = () => async (dispatch) => {
   try {
     const { data } = await axios.get(`https://api.github.com/orgs/angular`, {
       headers,
@@ -18,61 +19,54 @@ export const getReposAmount = async () => {
 
     const { public_repos: amount } = data;
 
-    return amount;
+    dispatch(setAmountOfAllRepos(amount));
   } catch (err) {
     console.error(`getReposAmount error: ${err}`);
-    return undefined;
   }
 };
 
 export const fetchRepos = (amountFetchedRepos) => async (dispatch) => {
   try {
-    // dispatch(setIsFetching(true));
-    const repos = [];
+    dispatch(setIsFetching(true));
 
-    const { data } = await axios.get(
+    const { data: repository } = await axios.get(
       `https://api.github.com/orgs/angular/repos?per_page=1&page=${amountFetchedRepos}`,
       {
         headers,
       }
     );
 
-    for (let i = 0; i < data.length; i += 1) {
-      const isLastIteration = i === data.length - 1;
-      const { id, name, contributors_url: url } = data[i];
-      repos.push({ id, name, url });
+    const { id, name, contributors_url: url } = repository[0];
 
-      if (isLastIteration) {
-        dispatch(setRepos(...repos));
-      }
-    }
+    dispatch(setRepos({ id, name, url }));
   } catch (err) {
     console.error(`fetchRepos error: ${err.message}`);
   }
 };
 
-export const fetchContributors = (repositories) => async (dispatch) => {
+export const fetchContributors = (repo, contribArr) => async (dispatch) => {
   try {
-    const contributorsArr = [];
+    const contributorsArr = contribArr ? [...contribArr] : [];
 
-    for (let i = 0; i < repositories.length; i += 1) {
-      const { url } = repositories[i];
-      const isLastIteration = i === repositories.length - 1;
-
-      const { data } = await axios.get(`${url}?per_page=${perPage}&page=1`, {
+    const { data: contributors } = await axios.get(
+      `${repo.url}?per_page=${perPage}&page=1`,
+      {
         headers,
-      });
+      }
+    );
 
-      data.forEach((el) => {
-        const { id, login, contributions } = el;
-        const contributor = contributorsArr.find((item) => item.id === id);
+    for (let i = 0; i < contributors.length; i += 1) {
+      const isLastIteration = i === contributors.length - 1;
+      const { id, login, contributions } = contributors[i];
+      const existingContributor = contributorsArr.find(
+        (item) => item.id === id
+      );
 
-        if (contributor) {
-          contributor.contributions += contributions;
-        } else {
-          contributorsArr.push({ login, id, contributions });
-        }
-      });
+      if (existingContributor) {
+        existingContributor.contributions += contributions;
+      } else {
+        contributorsArr.push({ id, login, contributions });
+      }
 
       if (isLastIteration) {
         dispatch(setContributors(contributorsArr));
@@ -83,39 +77,45 @@ export const fetchContributors = (repositories) => async (dispatch) => {
   }
 };
 
-export const fetchContributorsData = (contributors) => async (dispatch) => {
-  try {
-    const contrDataArr = [];
+export const fetchContributorsData =
+  (contributors, contributorsData) => async (dispatch) => {
+    try {
+      const contrDataArr = contributorsData ? [...contributorsData] : [];
 
-    for (let i = 0; i < contributors.length; i += 1) {
-      const { id, login, contributions } = contributors[i];
-      const { data } = await axios.get(
-        `https://api.github.com/users/${login}`,
-        {
-          headers,
+      for (let i = 0; i < contributors.length; i += 1) {
+        const { id, login, contributions } = contributors[i];
+        const isLastIteration = i === contributors.length - 1;
+        const contributor = contrDataArr.find((item) => item.id === id);
+
+        if (!contributor) {
+          const { data } = await axios.get(
+            `https://api.github.com/users/${login}`,
+            {
+              headers,
+            }
+          );
+
+          const { followers, public_gists: gists, public_repos: repos } = data;
+
+          contrDataArr.push({
+            id,
+            login,
+            contributions,
+            followers,
+            gists,
+            repos,
+          });
         }
-      );
-      const { followers, public_gists: gists, public_repos: repos } = data;
-      const isLastIteration = i === contributors.length - 1;
 
-      contrDataArr.push({
-        id,
-        login,
-        contributions,
-        followers,
-        gists,
-        repos,
-      });
-
-      if (isLastIteration) {
-        dispatch(setContributorsData(contrDataArr));
-        // dispatch(setIsFetching(false));
+        if (isLastIteration) {
+          dispatch(setContributorsData(contrDataArr));
+          dispatch(setIsFetching(false));
+        }
       }
+    } catch (err) {
+      console.error(`fetchContributorsData error: ${err.message}`);
     }
-  } catch (err) {
-    console.error(`fetchContributorsData error: ${err.message}`);
-  }
-};
+  };
 
 export const fetchUserRepos = async (userLogin) => {
   try {
