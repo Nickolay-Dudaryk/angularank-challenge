@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { nanoid } from "nanoid";
 import ContributorItem from "./ContributorItem";
-import sortingArr from "../helper";
+import { sortingArr } from "../helper";
 
 const ContributorList = ({
   selectedOption,
@@ -28,8 +28,8 @@ const ContributorList = ({
           id,
           login: name,
           contributions,
-          repos,
-          gists,
+          public_repos: repos,
+          public_gists: gists,
           followers,
         } = contributor;
         return (

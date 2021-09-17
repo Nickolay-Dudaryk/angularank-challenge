@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getReposAmount,
-  fetchContributors,
-  fetchContributorsData,
-  fetchRepos,
-} from "../actions/api";
+import { getReposAmount, fetchContributors, fetchRepos } from "../actions/api";
 import ContributorList from "../components/ContributorList";
 import SingleSelect from "../components/SingleSelect";
 
@@ -17,9 +12,6 @@ const Contributors = () => {
   );
   const repositories = useSelector((state) => state.githubApi.repositories);
   const contributors = useSelector((state) => state.githubApi.contributors);
-  const contributorsData = useSelector(
-    (state) => state.githubApi.contributorsData
-  );
   const isFetching = useSelector((state) => state.githubApi.isFetching);
 
   const [selectedOption, setSelectedOption] = useState("contributions");
@@ -44,12 +36,6 @@ const Contributors = () => {
     }
   }, [repositories]);
 
-  useEffect(() => {
-    if (contributors.length > 0) {
-      dispatch(fetchContributorsData(contributors, contributorsData || []));
-    }
-  }, [contributors]);
-
   const loadMoreBtnHandleClick = () => {
     setAmountFetchedRepos((prev) => prev + 1);
   };
@@ -68,7 +54,7 @@ const Contributors = () => {
       ) : (
         <ContributorList
           selectedOption={selectedOption}
-          contributors={contributorsData}
+          contributors={contributors}
           loadMoreBtnHandleClick={loadMoreBtnHandleClick}
           amountOfAllRepos={amountOfAllRepos}
           amountFetchedRepos={amountFetchedRepos}

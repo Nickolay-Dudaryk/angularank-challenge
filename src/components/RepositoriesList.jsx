@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import LinkBtn from "./LinkBtn";
 
 const RepositoriesList = ({ contributor, repos }) => {
+  console.info(repos);
   const router = useHistory();
 
   const handleClick = (id, name) => {

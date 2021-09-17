@@ -19,13 +19,14 @@ const ContributorData = () => {
     setIsLoading(true);
     (async () => {
       if (contributor) {
-        const data = await fetchUserRepos(contributor.login);
+        const data = await fetchUserRepos(
+          contributor.login,
+          contributor.public_repos
+        );
 
-        setRepos(data);
-        setIsLoading(false);
-      } else {
-        setIsLoading(false);
+        setRepos(...data);
       }
+      setIsLoading(false);
     })();
   }, [contributor]);
 
