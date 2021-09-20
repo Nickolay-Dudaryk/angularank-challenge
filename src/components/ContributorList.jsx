@@ -18,6 +18,7 @@ const ContributorList = ({
       <p>{`Contributors for ${amountFetchedRepos} of ${amountOfAllRepos} repositories`}</p>
       <button
         type="button"
+        disabled={amountFetchedRepos === amountOfAllRepos}
         className="load-more-btn"
         onClick={() => loadMoreBtnHandleClick()}
       >

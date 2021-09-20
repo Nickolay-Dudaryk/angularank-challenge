@@ -37,7 +37,9 @@ const Contributors = () => {
   }, [repositories]);
 
   const loadMoreBtnHandleClick = () => {
-    setAmountFetchedRepos((prev) => prev + 1);
+    if (amountFetchedRepos <= amountOfAllRepos) {
+      setAmountFetchedRepos((prev) => prev + 1);
+    }
   };
 
   return (
