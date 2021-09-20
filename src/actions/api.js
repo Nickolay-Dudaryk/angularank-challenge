@@ -83,8 +83,6 @@ export const fetchUserRepos = async (userLogin, reposAmount) => {
 
     const repos = await promiseAll(promisesArr);
 
-    // eslint-disable-next-line no-console
-    console.info(repos);
     return repos;
   } catch (err) {
     console.error(`fetchUserRepos error: ${err.message}`);
